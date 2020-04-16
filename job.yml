@@ -25,6 +25,7 @@ subjects:
 - kind: ServiceAccount
   name: secret-storageos
   namespace: storageos
+---
 apiVersion: batch/v1
 kind: Job
 metadata:
