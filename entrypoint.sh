@@ -1,5 +1,7 @@
 #!/bin/bash
 
+ls -application /etc/kubernetes/ssl/
+
 NAMESPACE=$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace)
 CA=$(cat /etc/kubernetes/ssl/kube-ca.pem | base64)
 CERT=$(cat /etc/kubernetes/ssl/kube-etcd-192-168-[0-9]*-[0-9]*.pem | base64)
