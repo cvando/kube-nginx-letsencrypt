@@ -46,6 +46,15 @@ spec:
         volumeMounts:
         - mountPath: /etc/kubernetes/ssl
         name: ssl-volume
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+               - key: node-role.kubernetes.io/etcd
+                  operator: In
+                  values:
+                  - "true"
       restartPolicy: Never
       tolerations:
       - key: "node-role.kubernetes.io/controlplane"
