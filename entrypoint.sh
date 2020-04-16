@@ -10,7 +10,7 @@ sed -e "s/CERT/${CERT}/" /secret-patch.json
 sed -e "s/KEY/${KEY}/" /secret-patch.json
 
 
-echo "Create secret ${SECRET}"
+echo "Create secret"
 RESP=`curl -v --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt -H "Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" -k -v -XPOST  -H "Accept: application/json, */*" -H "Content-Type: application/json" -d @/secret-patch.json https://kubernetes.default/api/v1/namespaces/storageos/secrets`
 echo $RESPCODE=`echo $RESP | jq -r '.code'`
 
@@ -21,7 +21,7 @@ case $CODE in
 	;;
 *)
 	echo "Unknown Error:"
-	echo $RESP
+	echo $RESPCODE
 	exit 1
 	;;
 esac
