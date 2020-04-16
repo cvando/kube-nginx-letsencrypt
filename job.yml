@@ -52,7 +52,7 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
             - matchExpressions:
-              - key: node-role.kubernetes.io/etcd
+              - key: node-role.kubernetes.io/controlplane
                 operator: In
                 values:
                 - "true"
