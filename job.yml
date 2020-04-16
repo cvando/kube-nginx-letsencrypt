@@ -38,7 +38,7 @@ spec:
       labels:
         app: secret-storageos
     spec:
-      serviceAccount: letsencrypt
+      serviceAccount: secret-storageos
       containers:
       - image: cvando/kube-nginx-letsencrypt:latest
         name: secret-storageos
