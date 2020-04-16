@@ -8,7 +8,7 @@ cat /secret-patch-template.json | \
 
 echo "Create secret"
 RESP=`curl --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt -H "Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" -k -v -XPOST  -H "Accept: application/json, */*" -H "Content-Type: application/json" -d @/secret-patch.json https://kubernetes.default/api/v1/namespaces/storageos/secrets`
-echo $RESPCODE=`echo $RESP | jq -r '.code'`
+$RESPCODE=`echo $RESP | jq -r '.code'`
 
 case $RESPCODE in
 200)
