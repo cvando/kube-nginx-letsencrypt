@@ -6,5 +6,5 @@ RUN apk update \
 
 CMD ["/entrypoint.sh"]
 
-COPY secret-patch.json /
+COPY secret-patch-template.json /
 COPY entrypoint.sh /
