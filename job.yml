@@ -1,6 +1,35 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: secret-storageos
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: secret-storageos
+rules:
+- apiGroups: [""]
+  resources:
+  - secrets
+  verbs: ["get", "list", "watch", "create", "update", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: secret-storageos
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: secret-storageos
+subjects:
+- kind: ServiceAccount
+  name: secret-storageos
+  namespace: storageos
+---
 apiVersion: batch/v1
 kind: Job
 metadata:
+  namespace: storageos
   name: secret-storageos
   labels:
     app: secret-storageos
@@ -11,20 +40,29 @@ spec:
       labels:
         app: secret-storageos
     spec:
-      serviceAccount: letsencrypt
+      serviceAccount: secret-storageos
       containers:
       - image: cvando/kube-nginx-letsencrypt:latest
         name: secret-storageos
         imagePullPolicy: Always
         volumeMounts:
         - mountPath: /etc/kubernetes/ssl
-        name: ssl-volume
+          name: ssl-volume
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: node-role.kubernetes.io/etcd
+                operator: In
+                values:
+                - "true"
       restartPolicy: Never
       tolerations:
-      - key: "node-role.kubernetes.io/controlplane"
+      - key: "node-role.kubernetes.io/etcd"
         operator: "Equal"
         value: "true"
-        effect: "NoSchedule"
+        effect: "NoExecute"
       - key: "node.cloudprovider.kubernetes.io/uninitialized"
         operator: "Equal"
         value: "true"
