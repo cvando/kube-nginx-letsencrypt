@@ -1,15 +1,13 @@
 #!/bin/bash
 
-ls -al /etc/kubernetes/ssl/
-
 NAMESPACE=$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace)
 CA=$(cat /etc/kubernetes/ssl/kube-ca.pem | base64)
 CERT=$(cat /etc/kubernetes/ssl/kube-etcd-192-168-[0-9]*-[0-9]*.pem | base64)
 KEY=$(cat /etc/kubernetes/ssl/kube-etcd-192-168-[0-9]*-[0-9]*-key.pem | base64)
 
-sed -e "s|CA|${CA}|" /secret-patch.json
-sed -e "s|CERT|${CERT}|" /secret-patch.json
-sed -e "s|KEY|${KEY}|" /secret-patch.json
+sed -i "s@CA@${CA}@" /secret-patch.json 
+sed -i "s|CERT|${CERT}|" /secret-patch.json
+sed -i "s|KEY|${KEY}|" /secret-patch.json
 
 
 echo "Create secret"
