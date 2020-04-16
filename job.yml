@@ -1,0 +1,35 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: secret-storageos
+  labels:
+    app: secret-storageos
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      labels:
+        app: secret-storageos
+    spec:
+      serviceAccount: letsencrypt
+      containers:
+      - image: cvando/kube-nginx-letsencrypt:latest
+        name: secret-storageos
+        imagePullPolicy: Always
+        volumeMounts:
+        - mountPath: /etc/kubernetes/ssl
+        name: ssl-volume
+      restartPolicy: Never
+      tolerations:
+      - key: "node-role.kubernetes.io/controlplane"
+        operator: "Equal"
+        value: "true"
+        effect: "NoSchedule"
+      - key: "node.cloudprovider.kubernetes.io/uninitialized"
+        operator: "Equal"
+        value: "true"
+        effect: "NoSchedule"
+      volumes:
+      - name: ssl-volume
+        hostPath:
+          path: /etc/kubernetes/ssl
