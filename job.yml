@@ -29,6 +29,7 @@ subjects:
 apiVersion: batch/v1
 kind: Job
 metadata:
+  namespace: storageos
   name: secret-storageos
   labels:
     app: secret-storageos
@@ -52,13 +53,13 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
             - matchExpressions:
-              - key: node-role.kubernetes.io/controlplane
+              - key: node-role.kubernetes.io/etcd
                 operator: In
                 values:
                 - "true"
       restartPolicy: Never
       tolerations:
-      - key: "node-role.kubernetes.io/controlplane"
+      - key: "node-role.kubernetes.io/etcd"
         operator: "Equal"
         value: "true"
         effect: "NoSchedule"
