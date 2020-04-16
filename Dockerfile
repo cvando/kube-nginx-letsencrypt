@@ -5,5 +5,5 @@ RUN mkdir /etc/letsencrypt
 
 CMD ["/entrypoint.sh"]
 
-COPY secret-patch-template.json /
+COPY secret-patch.json /
 COPY entrypoint.sh /
