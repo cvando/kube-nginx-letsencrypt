@@ -14,14 +14,14 @@ echo "Create secret"
 RESP=`curl -v --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt -H "Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" -k -v -XPOST  -H "Accept: application/json, */*" -H "Content-Type: application/json" -d @/secret-patch.json https://kubernetes.default/api/v1/namespaces/storageos/secrets`
 echo $RESPCODE=`echo $RESP | jq -r '.code'`
 
-case $CODE in
+case $RESPCODE in
 200)
 	echo "Secret Created"
 	exit 0
 	;;
 *)
 	echo "Unknown Error:"
-	echo $RESPCODE
+	echo $RESP
 	exit 1
 	;;
 esac
