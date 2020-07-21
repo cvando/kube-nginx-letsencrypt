@@ -24,7 +24,7 @@ case $RESPCODE in
 	;;
 *)
 	echo "Unknown Error:"
-	echo $RESP
+	echo $RESPCODE
 	exit 1
 	;;
 esac
