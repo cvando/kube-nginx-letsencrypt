@@ -18,7 +18,7 @@ RESPCODE=`curl -s -o /dev/null -w '%{http_code}' --cacert /var/run/secrets/kuber
 
 
 case $RESPCODE in
-200)
+201)
 	echo "Secret Created"
 	exit 0
 	;;
