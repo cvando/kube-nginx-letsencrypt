@@ -1,9 +1,16 @@
 #!/bin/bash
 
+CERTFILE=$(ls /etc/kubernetes/ssl/ | grep kube-etcd-.*[0-9].pem)
+KEYFILE=$(ls /etc/kubernetes/ssl/ | grep kube-etcd-.*[0-9]-key.pem)
+
+CERTPATH=/etc/kubernetes/ssl/$CERTFILE
+KEYPATH=/etc/kubernetes/ssl/$KEYFILE
+
+
 cat /secret-patch-template.json | \
 	sed "s/CA/$(cat /etc/kubernetes/ssl/kube-ca.pem | base64 | tr -d '\n')/" | \
-	sed "s/CERT/$(cat /etc/kubernetes/ssl/kube-etcd-192-168-[0-9]*-[0-9]*.pem | base64 | tr -d '\n')/" | \
-	sed "s/KEY/$(cat /etc/kubernetes/ssl/kube-etcd-192-168-[0-9]*-[0-9]*-key.pem |  base64 | tr -d '\n')/" \
+	sed "s/CERT/$(cat $CERTPATH | base64 | tr -d '\n')/" | \
+	sed "s/KEY/$(cat $KEYPATH |  base64 | tr -d '\n')/" \
 	> /secret-patch.json
 
 echo "Create secret"
